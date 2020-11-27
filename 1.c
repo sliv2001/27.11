@@ -18,12 +18,14 @@ int main(int argc, char** argv){
 		all[i-1].fd = fd[i-1];
 		all[i-1].events = POLLIN;
 	}
-	if (poll(all, argc-1, 5000)<0) return -1;
-	for (i=1; i<argc; i++){
-		if (all[i-1].revents & POLLIN==all[i-1].revents){
-			fstat(all[i-1].fd, &t);
-			if (read(all[i-1].fd, k, t.st_size)==0)
-				printf("%s", k);
+	while (1){
+		if (poll(all, argc-1, 5000)<0) return -1;
+		for (i=1; i<argc; i++){
+			if (all[i-1].revents & POLLIN==all[i-1].revents){
+				fstat(all[i-1].fd, &t);
+				if (read(all[i-1].fd, k, t.st_size)==0)
+					printf("%s", k);
+			}
 		}
 	}
 	a:
